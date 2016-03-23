@@ -1,5 +1,6 @@
 package se.timberline.mmos;
 
+import se.timberline.mmos.api.PlanetMessage;
 import se.timberline.mmos.api.PositionMessage;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ public class Server {
 //            ObjectInputStream clientIn = new ObjectInputStream(client.getInputStream());
             ObjectOutputStream clientOut = new ObjectOutputStream(client.getOutputStream());
             System.out.println("Client connected");
-            clientOut.writeObject(new PositionMessage(new Random().nextInt(),new Random().nextInt()));
+            clientOut.writeObject(new PositionMessage(0,0));
+            clientOut.writeObject(new PlanetMessage(10,10, "Centrus"));
             clientOut.flush();
             System.out.println("flushed");
         }
