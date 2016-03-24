@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import se.timberline.mmos.api.Message;
 import se.timberline.mmos.api.PlanetMessage;
 import se.timberline.mmos.api.PositionMessage;
@@ -28,6 +29,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private LocalServer server;
     OrthographicCamera camera;
     private Sprite sprite;
+    private Vector2 direction = new Vector2(0,100);
 
     @Override
 	public void create () {
@@ -82,14 +84,22 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.LEFT)
+        if(keycode == Input.Keys.LEFT) {
             sprite.rotate(1);
-        if(keycode == Input.Keys.RIGHT)
+            direction.rotate(1);
+        }
+        if(keycode == Input.Keys.RIGHT) {
             sprite.rotate(-1);
-        if(keycode == Input.Keys.UP)
-            camera.translate(0,-32);
-        if(keycode == Input.Keys.DOWN)
-            camera.translate(0,32);
+            direction.rotate(-1);
+        }
+        if(keycode == Input.Keys.UP) {
+            float x = sprite.getX();
+            float y = sprite.getY();
+            sprite.setX(x + direction.x);
+            sprite.setY(y + direction.y);
+        }
+//        if(keycode == Input.Keys.DOWN)
+//            camera.translate(0,32);
         return false;
     }
 
