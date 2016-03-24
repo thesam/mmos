@@ -2,7 +2,7 @@ package se.timberline.mmos.api;
 
 import java.io.Serializable;
 
-public class PlanetMessage implements Serializable {
+public class PlanetMessage extends Message {
 
     public final int x;
     public final int y;

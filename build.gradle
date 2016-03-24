@@ -11,6 +11,12 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
+    apply plugin: "java"
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
     version = '1.0'
     ext {
         appName = "mmos"
@@ -29,9 +35,6 @@ allprojects {
 }
 
 project(":desktop") {
-    apply plugin: "java"
-
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -40,8 +43,6 @@ project(":desktop") {
 }
 
 project(":core") {
-    apply plugin: "java"
-
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

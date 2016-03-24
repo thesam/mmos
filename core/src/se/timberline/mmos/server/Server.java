@@ -1,4 +1,4 @@
-package se.timberline.mmos;
+package se.timberline.mmos.server;
 
 import se.timberline.mmos.api.PlanetMessage;
 import se.timberline.mmos.api.PositionMessage;

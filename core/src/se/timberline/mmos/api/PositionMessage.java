@@ -2,7 +2,7 @@ package se.timberline.mmos.api;
 
 import java.io.Serializable;
 
-public class PositionMessage implements Serializable {
+public class PositionMessage extends Message {
 
     public final int x;
     public final int y;
