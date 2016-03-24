@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import se.timberline.mmos.api.Message;
@@ -26,6 +27,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private Position currentPosition;
     private LocalServer server;
     OrthographicCamera camera;
+    private Sprite sprite;
 
     @Override
 	public void create () {
@@ -33,6 +35,8 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 		batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 		img = new Texture("badlogic.jpg");
+        sprite = new Sprite(img);
+        sprite.setPosition(10,10);
         planets = new ArrayList<>();
         server = new LocalServer();
         server.connect(msg -> parseMessage(msg));
@@ -52,21 +56,22 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.end();
         camera.update();
+        batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+//		batch.draw(img, 0, 0);
+        sprite.draw(batch);
+		batch.end();
 //        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(1, 1, 0, 1);
-        shapeRenderer.triangle(30,30,30,40,50,50);
-        if (currentPosition != null) {
-            for (PlanetMessage planet : planets) {
-                shapeRenderer.circle(planet.x, planet.y, 5);
-            }
-            shapeRenderer.end();
-        }
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(1, 1, 0, 1);
+//        shapeRenderer.triangle(30,30,30,40,50,50);
+//        if (currentPosition != null) {
+//            for (PlanetMessage planet : planets) {
+//                shapeRenderer.circle(planet.x, planet.y, 5);
+//            }
+//        }
+//        shapeRenderer.end();
 
     }
 
@@ -78,9 +83,9 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.LEFT)
-            camera.translate(-32,0);
+            sprite.rotate(1);
         if(keycode == Input.Keys.RIGHT)
-            camera.translate(32,0);
+            sprite.rotate(-1);
         if(keycode == Input.Keys.UP)
             camera.translate(0,-32);
         if(keycode == Input.Keys.DOWN)
