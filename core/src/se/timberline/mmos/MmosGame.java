@@ -38,7 +38,8 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         shapeRenderer = new ShapeRenderer();
 		img = new Texture("badlogic.jpg");
         sprite = new Sprite(img);
-        sprite.setPosition(10,10);
+        sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
+        sprite.setPosition(10 - sprite.getWidth()/2,10-sprite.getHeight()/2);
         planets = new ArrayList<>();
         server = new LocalServer();
         server.connect(msg -> parseMessage(msg));
@@ -58,22 +59,23 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.position.set(sprite.getX(),sprite.getY(),0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 //		batch.draw(img, 0, 0);
         sprite.draw(batch);
 		batch.end();
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(1, 1, 0, 1);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(1, 1, 0, 1);
 //        shapeRenderer.triangle(30,30,30,40,50,50);
-//        if (currentPosition != null) {
-//            for (PlanetMessage planet : planets) {
-//                shapeRenderer.circle(planet.x, planet.y, 5);
-//            }
-//        }
-//        shapeRenderer.end();
+        if (currentPosition != null) {
+            for (PlanetMessage planet : planets) {
+                shapeRenderer.circle(planet.x, planet.y, 5);
+            }
+        }
+        shapeRenderer.end();
 
     }
 
