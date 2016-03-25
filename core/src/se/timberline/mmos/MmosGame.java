@@ -59,7 +59,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.position.set(sprite.getX(),sprite.getY(),0);
+        camera.position.set(sprite.getX() + sprite.getWidth() /2,sprite.getY() + sprite.getHeight()/2,0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -95,13 +95,13 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
             direction.rotate(-1);
         }
         if(keycode == Input.Keys.UP) {
-            float x = sprite.getX();
-            float y = sprite.getY();
-            sprite.setX(x + direction.x);
-            sprite.setY(y + direction.y);
+            sprite.setX(sprite.getX() + direction.x);
+            sprite.setY(sprite.getY() + direction.y);
         }
-//        if(keycode == Input.Keys.DOWN)
-//            camera.translate(0,32);
+        if(keycode == Input.Keys.DOWN) {
+            sprite.setX(sprite.getX() - direction.x);
+            sprite.setY(sprite.getY() - direction.y);
+        }
         return false;
     }
 
