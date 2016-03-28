@@ -21,7 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MmosGame extends ApplicationAdapter implements InputProcessor{
-	SpriteBatch batch;
+    public static final int ROTATION_SPEED = 100;
+    public static final int SPEED_DELTA = 100;
+
+    SpriteBatch batch;
 	Texture img;
     private ShapeRenderer shapeRenderer;
     private List<PlanetMessage> planets;
@@ -31,6 +34,8 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private Sprite sprite;
     private Vector2 direction = new Vector2(0,1);
     private int speed = 0;
+    private boolean turningLeft;
+    private boolean turningRight;
 
     @Override
 	public void create () {
@@ -68,6 +73,14 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         Vector2 distance = direction.cpy().scl(speed * delta);
         sprite.setX(sprite.getX() + distance.x);
         sprite.setY(sprite.getY() + distance.y);
+        if (turningLeft) {
+            sprite.rotate(ROTATION_SPEED *delta);
+            direction.rotate(ROTATION_SPEED*delta);
+        }
+        if (turningRight) {
+            sprite.rotate(-ROTATION_SPEED*delta);
+            direction.rotate(-ROTATION_SPEED*delta);
+        }
     }
 
     private void draw() {
@@ -94,24 +107,28 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.LEFT) {
+            turningLeft = true;
+        }
+        if(keycode == Input.Keys.RIGHT) {
+            turningRight = true;
+        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.LEFT) {
-            sprite.rotate(1);
-            direction.rotate(1);
+            turningLeft = false;
         }
         if(keycode == Input.Keys.RIGHT) {
-            sprite.rotate(-1);
-            direction.rotate(-1);
+            turningRight = false;
         }
         if(keycode == Input.Keys.UP) {
-            speed += 100;
+            speed += SPEED_DELTA;
         }
         if(keycode == Input.Keys.DOWN) {
-            speed -= 100;
+            speed -= SPEED_DELTA;
         }
         return false;
     }
