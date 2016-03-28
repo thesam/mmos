@@ -29,7 +29,8 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private LocalServer server;
     OrthographicCamera camera;
     private Sprite sprite;
-    private Vector2 direction = new Vector2(0,100);
+    private Vector2 direction = new Vector2(0,1);
+    private int speed = 0;
 
     @Override
 	public void create () {
@@ -57,15 +58,28 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 
     @Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        update();
+        draw();
+
+    }
+
+    private void update() {
+        float delta = Gdx.graphics.getDeltaTime();
+        Vector2 distance = direction.cpy().scl(speed * delta);
+        sprite.setX(sprite.getX() + distance.x);
+        sprite.setY(sprite.getY() + distance.y);
+    }
+
+    private void draw() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.position.set(sprite.getX() + sprite.getWidth() /2,sprite.getY() + sprite.getHeight()/2,0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-		batch.begin();
+        batch.begin();
 //		batch.draw(img, 0, 0);
         sprite.draw(batch);
-		batch.end();
+        batch.end();
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(1, 1, 0, 1);
@@ -76,7 +90,6 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
             }
         }
         shapeRenderer.end();
-
     }
 
     @Override
@@ -95,12 +108,10 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
             direction.rotate(-1);
         }
         if(keycode == Input.Keys.UP) {
-            sprite.setX(sprite.getX() + direction.x);
-            sprite.setY(sprite.getY() + direction.y);
+            speed += 100;
         }
         if(keycode == Input.Keys.DOWN) {
-            sprite.setX(sprite.getX() - direction.x);
-            sprite.setY(sprite.getY() - direction.y);
+            speed -= 100;
         }
         return false;
     }
