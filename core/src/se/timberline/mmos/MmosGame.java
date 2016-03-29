@@ -119,6 +119,15 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         if(keycode == Input.Keys.RIGHT) {
             turningRight = true;
         }
+        if(keycode == Input.Keys.UP) {
+            speed += SPEED_DELTA;
+        }
+        if(keycode == Input.Keys.DOWN) {
+            speed -= SPEED_DELTA;
+        }
+        if(keycode == Input.Keys.SPACE) {
+            speed = 0;
+        }
         return false;
     }
 
@@ -129,12 +138,6 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         }
         if(keycode == Input.Keys.RIGHT) {
             turningRight = false;
-        }
-        if(keycode == Input.Keys.UP) {
-            speed += SPEED_DELTA;
-        }
-        if(keycode == Input.Keys.DOWN) {
-            speed -= SPEED_DELTA;
         }
         return false;
     }
