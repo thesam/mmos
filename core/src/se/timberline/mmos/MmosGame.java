@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import se.timberline.mmos.api.Message;
 import se.timberline.mmos.api.PlanetMessage;
 import se.timberline.mmos.api.PositionMessage;
@@ -25,7 +27,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     public static final int SPEED_DELTA = 100;
 
     SpriteBatch batch;
-	Texture img;
+	Texture shipImage;
     private ShapeRenderer shapeRenderer;
     private List<PlanetMessage> planets;
     private Position currentPosition;
@@ -36,14 +38,17 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private int speed = 0;
     private boolean turningLeft;
     private boolean turningRight;
+    private TiledDrawable background;
 
     @Override
 	public void create () {
         camera = new OrthographicCamera(1900,1000);
 		batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-		img = new Texture("badlogic.jpg");
-        sprite = new Sprite(img);
+		shipImage = new Texture("ship.png");
+        background = new TiledDrawable(new TextureRegion(new Texture("badlogic.jpg")));
+        sprite = new Sprite(shipImage);
+        sprite.setBounds(0,0,160,160);
         sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
         sprite.setPosition(10 - sprite.getWidth()/2,10-sprite.getHeight()/2);
         planets = new ArrayList<>();
@@ -90,7 +95,8 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-//		batch.draw(img, 0, 0);
+        background.draw(batch,0,0,500,500);
+//		batch.draw(shipImage, 0, 0);
         sprite.draw(batch);
         batch.end();
         shapeRenderer.setProjectionMatrix(camera.combined);
