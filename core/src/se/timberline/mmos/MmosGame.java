@@ -20,11 +20,14 @@ import se.timberline.mmos.model.Position;
 import se.timberline.mmos.server.LocalServer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MmosGame extends ApplicationAdapter implements InputProcessor{
     public static final int ROTATION_SPEED = 100;
     public static final int SPEED_DELTA = 100;
+    public static final int VIEWPORT_WIDTH = 1900;
+    public static final int VIEWPORT_HEIGHT = 1000;
 
     SpriteBatch batch;
 	Texture shipImage;
@@ -39,14 +42,23 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private boolean turningLeft;
     private boolean turningRight;
     private TiledDrawable background;
+    private List<Sprite> bg = new ArrayList<>();
 
     @Override
 	public void create () {
-        camera = new OrthographicCamera(1900,1000);
+        camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 		batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 		shipImage = new Texture("ship.png");
-        background = new TiledDrawable(new TextureRegion(new Texture("badlogic.jpg")));
+        Texture starsTexture = new Texture("stars.png");
+        for (int x = 0; x < VIEWPORT_WIDTH / 160; x++) {
+            for (int y = 0; y < VIEWPORT_HEIGHT / 160; y++) {
+                Sprite sp = new Sprite(starsTexture);
+                sp.setBounds(x*160,y*160,160,160);
+                bg.add(sp);
+            }
+        }
+        background = new TiledDrawable(new TextureRegion(starsTexture));
         sprite = new Sprite(shipImage);
         sprite.setBounds(0,0,160,160);
         sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
@@ -95,8 +107,11 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        background.draw(batch,0,0,500,500);
+//        background.draw(batch,0,0,500,500);
 //		batch.draw(shipImage, 0, 0);
+        for (Sprite bgs : bg) {
+            bgs.draw(batch);
+        }
         sprite.draw(batch);
         batch.end();
         shapeRenderer.setProjectionMatrix(camera.combined);
