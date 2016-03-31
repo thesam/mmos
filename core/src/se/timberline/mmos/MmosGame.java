@@ -32,7 +32,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     SpriteBatch batch;
 	Texture shipImage;
     private ShapeRenderer shapeRenderer;
-    private List<PlanetMessage> planets;
+    private List<Sprite> planets;
     private LocalServer server;
     OrthographicCamera camera;
     private Sprite sprite;
@@ -45,6 +45,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private BitmapFont font;
     private SpriteBatch textBatch;
     private Position currentSector;
+    private Texture planetTexture;
 
     @Override
 	public void create () {
@@ -55,6 +56,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         shapeRenderer = new ShapeRenderer();
 		shipImage = new Texture("ship.png");
         Texture starsTexture = new Texture("stars.png");
+        planetTexture = new Texture("planet.png");
         int cols = (VIEWPORT_WIDTH / 160) + 1;
         int rows = (VIEWPORT_HEIGHT / 160) + 1;
         for (int x = 0; x < cols; x++) {
@@ -80,7 +82,10 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
             PositionMessage pmsg = (PositionMessage) msg;
             currentSector = new Position(pmsg.x,pmsg.y);
         } else if (msg instanceof PlanetMessage) {
-            planets.add((PlanetMessage) msg);
+            Sprite planet = new Sprite(planetTexture);
+            PlanetMessage planetMessage = (PlanetMessage) msg;
+            planet.setBounds(planetMessage.x,planetMessage.y,160,160);
+            planets.add(planet);
         }
     }
 
@@ -118,18 +123,13 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         for (Sprite bgs : bg) {
             bgs.draw(batch);
         }
-        sprite.draw(batch);
-        batch.end();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(1, 1, 0, 1);
-//        shapeRenderer.triangle(30,30,30,40,50,50);
         if (currentSector != null) {
-            for (PlanetMessage planet : planets) {
-                shapeRenderer.circle(planet.x, planet.y, 5);
+            for (Sprite planet : planets) {
+                planet.draw(batch);
             }
         }
-        shapeRenderer.end();
+        sprite.draw(batch);
+        batch.end();
         textBatch.begin();
         font.draw(textBatch, "Position: " + sprite.getX() +", "+ sprite.getY()+ "\n" + "Sector: " + currentSector.x + ", " + currentSector.y, 10, 40);
         textBatch.end();
