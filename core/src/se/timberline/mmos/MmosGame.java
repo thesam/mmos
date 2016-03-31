@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,7 +21,6 @@ import se.timberline.mmos.model.Position;
 import se.timberline.mmos.server.LocalServer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class MmosGame extends ApplicationAdapter implements InputProcessor{
@@ -33,7 +33,6 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 	Texture shipImage;
     private ShapeRenderer shapeRenderer;
     private List<PlanetMessage> planets;
-    private Position currentPosition;
     private LocalServer server;
     OrthographicCamera camera;
     private Sprite sprite;
@@ -43,11 +42,16 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private boolean turningRight;
     private TiledDrawable background;
     private List<Sprite> bg = new ArrayList<>();
+    private BitmapFont font;
+    private SpriteBatch textBatch;
+    private Position currentSector;
 
     @Override
 	public void create () {
+        font = new BitmapFont();
         camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 		batch = new SpriteBatch();
+        textBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 		shipImage = new Texture("ship.png");
         Texture starsTexture = new Texture("stars.png");
@@ -74,7 +78,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     private void parseMessage(Message msg) {
         if (msg instanceof PositionMessage) {
             PositionMessage pmsg = (PositionMessage) msg;
-            currentPosition = new Position(pmsg.x,pmsg.y);
+            currentSector = new Position(pmsg.x,pmsg.y);
         } else if (msg instanceof PlanetMessage) {
             planets.add((PlanetMessage) msg);
         }
@@ -120,12 +124,15 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(1, 1, 0, 1);
 //        shapeRenderer.triangle(30,30,30,40,50,50);
-        if (currentPosition != null) {
+        if (currentSector != null) {
             for (PlanetMessage planet : planets) {
                 shapeRenderer.circle(planet.x, planet.y, 5);
             }
         }
         shapeRenderer.end();
+        textBatch.begin();
+        font.draw(textBatch, "Position: " + sprite.getX() +", "+ sprite.getY()+ "\n" + "Sector: " + currentSector.x + ", " + currentSector.y, 10, 40);
+        textBatch.end();
     }
 
     @Override
