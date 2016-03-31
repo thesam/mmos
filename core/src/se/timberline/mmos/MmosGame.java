@@ -51,10 +51,12 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         shapeRenderer = new ShapeRenderer();
 		shipImage = new Texture("ship.png");
         Texture starsTexture = new Texture("stars.png");
-        for (int x = 0; x < VIEWPORT_WIDTH / 160; x++) {
-            for (int y = 0; y < VIEWPORT_HEIGHT / 160; y++) {
+        int cols = (VIEWPORT_WIDTH / 160) + 1;
+        int rows = (VIEWPORT_HEIGHT / 160) + 1;
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
                 Sprite sp = new Sprite(starsTexture);
-                sp.setBounds(x*160,y*160,160,160);
+                sp.setBounds(x*160-VIEWPORT_WIDTH/2,y*160-VIEWPORT_HEIGHT/2,160,160);
                 bg.add(sp);
             }
         }
