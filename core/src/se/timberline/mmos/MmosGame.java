@@ -55,7 +55,7 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
         textBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 		shipImage = new Texture("ship.png");
-        Texture starsTexture = new Texture("stars.png");
+        Texture starsTexture = new Texture("grass.png");
         planetTexture = new Texture("planet.png");
         int cols = (VIEWPORT_WIDTH / 160) + 1;
         int rows = (VIEWPORT_HEIGHT / 160) + 1;
@@ -98,17 +98,18 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
 
     private void update() {
         float delta = Gdx.graphics.getDeltaTime();
-        Vector2 distance = direction.cpy().scl(speed * delta);
+        Vector2 distance = direction.cpy().rotate(90).scl(speed * delta);
         sprite.setX(sprite.getX() + distance.x);
         sprite.setY(sprite.getY() + distance.y);
-        if (turningLeft) {
-            sprite.rotate(ROTATION_SPEED *delta);
-            direction.rotate(ROTATION_SPEED*delta);
-        }
-        if (turningRight) {
-            sprite.rotate(-ROTATION_SPEED*delta);
-            direction.rotate(-ROTATION_SPEED*delta);
-        }
+		sprite.setRotation(direction.angle());
+//        if (turningLeft) {
+//            sprite.rotate(ROTATION_SPEED *delta);
+//            direction.rotate(ROTATION_SPEED*delta);
+//        }
+//        if (turningRight) {
+//            sprite.rotate(-ROTATION_SPEED*delta);
+//            direction.rotate(-ROTATION_SPEED*delta);
+//        }
     }
 
     private void draw() {
@@ -138,25 +139,34 @@ public class MmosGame extends ApplicationAdapter implements InputProcessor{
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.LEFT) {
+			speed = SPEED_DELTA;
+			direction.setAngle(90);
             turningLeft = true;
         }
         if(keycode == Input.Keys.RIGHT) {
+			speed = SPEED_DELTA;
+			direction.setAngle(270);
             turningRight = true;
         }
         if(keycode == Input.Keys.UP) {
-            speed += SPEED_DELTA;
+			speed = SPEED_DELTA;
+			direction.setAngle(0);
+//            speed += SPEED_DELTA;
         }
         if(keycode == Input.Keys.DOWN) {
-            speed -= SPEED_DELTA;
+			speed = SPEED_DELTA;
+			direction.setAngle(180);
+//            speed -= SPEED_DELTA;
         }
-        if(keycode == Input.Keys.SPACE) {
-            speed = 0;
-        }
+//        if(keycode == Input.Keys.SPACE) {
+//            speed = 0;
+//        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
+		speed = 0;
         if(keycode == Input.Keys.LEFT) {
             turningLeft = false;
         }
